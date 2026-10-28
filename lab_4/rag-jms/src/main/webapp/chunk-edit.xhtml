@@ -1,0 +1,37 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="jakarta.faces.html"
+                xmlns:f="jakarta.faces.core"
+                xmlns:ui="jakarta.faces.facelets"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">Чанк</ui:define>
+
+    <ui:define name="content">
+        <f:metadata>
+            <f:viewParam name="id" value="#{chunkEditBean.id}"/>
+            <f:viewParam name="docId" value="#{chunkEditBean.docId}"/>
+            <f:viewAction action="#{chunkEditBean.load}"/>
+        </f:metadata>
+
+        <h2>#{chunkEditBean['new'] ? 'Новый чанк' : 'Редактирование чанка'}</h2>
+
+        <h:form styleClass="edit">
+            <h:outputLabel for="index" value="Номер в документе (пусто = в конец)"/>
+            <h:inputText id="index" value="#{chunkEditBean.chunk.chunkIndex}" size="5"/>
+            <h:message for="index" styleClass="field-error"/>
+
+            <h:outputLabel for="content" value="Текст чанка *"/>
+            <h:inputTextarea id="content" value="#{chunkEditBean.chunk.content}" rows="8" cols="80"/>
+            <h:message for="content" styleClass="field-error"/>
+
+            <p class="hint">Число токенов посчитается автоматически при сохранении.</p>
+
+            <div class="buttons">
+                <h:commandButton value="Сохранить" action="#{chunkEditBean.save}"/>
+                <h:link outcome="chunks" value="Отмена">
+                    <f:param name="docId" value="#{chunkEditBean.docId}"/>
+                </h:link>
+            </div>
+        </h:form>
+    </ui:define>
+</ui:composition>
