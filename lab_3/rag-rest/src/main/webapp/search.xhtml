@@ -1,0 +1,47 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="jakarta.faces.html"
+                xmlns:f="jakarta.faces.core"
+                xmlns:ui="jakarta.faces.facelets"
+                xmlns:a="jakarta.faces.passthrough"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">Поиск контекста</ui:define>
+
+    <ui:define name="content">
+        <h2>Поиск контекста для вопроса</h2>
+        <p class="hint">Так RAG-система выбирает чанки, которые будут добавлены в промпт к LLM.
+            Оценка = сколько разных слов запроса встречается в чанке.</p>
+
+        <h:form styleClass="inline">
+            <h:inputText id="q" value="#{searchBean.query}" size="50" required="true"
+                         requiredMessage="Введите вопрос" a:placeholder="Например: как считать длину чанков?"/>
+            <h:outputLabel for="k" value="Top-K:"/>
+            <h:inputText id="k" value="#{searchBean.topK}" size="3"/>
+            <h:commandButton value="Найти" action="#{searchBean.search}"/>
+        </h:form>
+
+        <h:panelGroup rendered="#{searchBean.hits != null}">
+            <p>Запрос: #{searchBean.queryTokens} токенов. Найдено чанков: #{searchBean.hits.size()},
+                контекст займёт #{searchBean.contextTokens} токенов.</p>
+            <h:dataTable value="#{searchBean.hits}" var="hit" styleClass="grid"
+                         rendered="#{not empty searchBean.hits}">
+                <h:column>
+                    <f:facet name="header">Оценка</f:facet>
+                    #{hit.score}
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Документ</f:facet>
+                    #{hit.chunk.document.title} (чанк №#{hit.chunk.chunkIndex})
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Текст</f:facet>
+                    <span class="chunk-text">#{hit.chunk.content}</span>
+                </h:column>
+                <h:column>
+                    <f:facet name="header">Токенов</f:facet>
+                    #{hit.chunk.tokenCount}
+                </h:column>
+            </h:dataTable>
+        </h:panelGroup>
+    </ui:define>
+</ui:composition>

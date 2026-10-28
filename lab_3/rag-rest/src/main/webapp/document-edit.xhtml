@@ -1,0 +1,48 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="jakarta.faces.html"
+                xmlns:f="jakarta.faces.core"
+                xmlns:ui="jakarta.faces.facelets"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">Документ</ui:define>
+
+    <ui:define name="content">
+        <!-- Берём id из URL (?id=...) и перед показом вызываем load() -->
+        <f:metadata>
+            <f:viewParam name="id" value="#{documentEditBean.id}"/>
+            <f:viewAction action="#{documentEditBean.load}"/>
+        </f:metadata>
+
+        <h2>#{documentEditBean['new'] ? 'Новый документ' : 'Редактирование документа'}</h2>
+
+        <h:form styleClass="edit">
+            <h:outputLabel for="title" value="Название *"/>
+            <h:inputText id="title" value="#{documentEditBean.document.title}" size="60"/>
+            <h:message for="title" styleClass="field-error"/>
+
+            <h:outputLabel for="source" value="Источник (URL, файл)"/>
+            <h:inputText id="source" value="#{documentEditBean.document.source}" size="60"/>
+            <h:message for="source" styleClass="field-error"/>
+
+            <h:outputLabel for="language" value="Язык *"/>
+            <h:selectOneMenu id="language" value="#{documentEditBean.document.language}">
+                <f:selectItem itemValue="ru" itemLabel="Русский"/>
+                <f:selectItem itemValue="en" itemLabel="English"/>
+            </h:selectOneMenu>
+
+            <h:outputLabel for="content" value="Текст документа *"/>
+            <h:inputTextarea id="content" value="#{documentEditBean.document.content}" rows="12" cols="80"/>
+            <h:message for="content" styleClass="field-error"/>
+
+            <h:panelGroup rendered="#{not documentEditBean['new']}">
+                <p class="hint">Сейчас в тексте #{documentEditBean.document.tokenCount} токенов
+                    (пересчитывается автоматически при сохранении).</p>
+            </h:panelGroup>
+
+            <div class="buttons">
+                <h:commandButton value="Сохранить" action="#{documentEditBean.save}"/>
+                <h:link outcome="documents" value="Отмена"/>
+            </div>
+        </h:form>
+    </ui:define>
+</ui:composition>

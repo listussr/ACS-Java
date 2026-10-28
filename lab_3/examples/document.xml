@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<document>
+    <title>Перплексия</title>
+    <source>пример для ЛР3</source>
+    <language>ru</language>
+    <content>Перплексия показывает, насколько модель «удивлена» текстом. Чем ниже перплексия, тем лучше модель предсказывает следующий токен.</content>
+</document>
