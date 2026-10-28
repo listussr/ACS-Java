@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE hibernate-configuration PUBLIC
+        "-//Hibernate/Hibernate Configuration DTD 3.0//EN"
+        "http://www.hibernate.org/dtd/hibernate-configuration-3.0.dtd">
+<!-- Классический конфигурационный файл Hibernate.
+     Соединение с БД здесь не указано: его даёт Spring (DataSource из application.properties).
+     Диалект SQL (PostgreSQL) Hibernate определяет сам по соединению. -->
+<hibernate-configuration>
+    <session-factory>
+        <!-- При старте сверить сущности со схемой БД; при расхождении приложение не запустится.
+             Сами таблицы создаёт SQL-скрипт db/01_schema.sql, Hibernate их не меняет. -->
+        <property name="hibernate.hbm2ddl.auto">validate</property>
+
+        <!-- Красиво форматировать SQL в логе (сам вывод SQL включён в application.properties) -->
+        <property name="hibernate.format_sql">true</property>
+
+        <!-- Классы-сущности, которыми управляет Hibernate -->
+        <mapping class="ru.acs.rag.entity.Document"/>
+        <mapping class="ru.acs.rag.entity.Chunk"/>
+    </session-factory>
+</hibernate-configuration>

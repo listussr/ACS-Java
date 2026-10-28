@@ -1,0 +1,6 @@
+# Результаты сборки Maven
+rag-spring/target/
+# IDE
+.idea/
+*.iml
+.vscode/

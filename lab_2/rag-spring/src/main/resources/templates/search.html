@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Поиск контекста')}"></head>
+<body>
+<header th:replace="~{fragments :: header}"></header>
+<main>
+    <h2>Поиск контекста для вопроса</h2>
+    <p class="hint">Так RAG-система выбирает чанки, которые будут добавлены в промпт к LLM.
+        Оценка = сколько разных слов запроса встречается в чанке.</p>
+
+    <form class="inline" method="get" th:action="@{/search}">
+        <input type="text" name="q" th:value="${q}" size="50" required
+               placeholder="Например: как считать длину чанков?">
+        <label for="topK">Top-K:</label>
+        <input type="number" id="topK" name="topK" th:value="${topK}" min="1" size="3">
+        <button type="submit">Найти</button>
+    </form>
+
+    <div th:if="${hits != null}">
+        <p>Запрос: <span th:text="${queryTokens}">0</span> токенов.
+            Найдено чанков: <span th:text="${#lists.size(hits)}">0</span>,
+            контекст займёт <span th:text="${contextTokens}">0</span> токенов.</p>
+
+        <table class="grid" th:unless="${#lists.isEmpty(hits)}">
+            <tr><th>Оценка</th><th>Документ</th><th>Текст</th><th>Токенов</th></tr>
+            <tr th:each="hit : ${hits}">
+                <td th:text="${hit.score}">0</td>
+                <td th:text="|${hit.chunk.document.title} (чанк №${hit.chunk.chunkIndex})|">док</td>
+                <td class="chunk-text" th:text="${hit.chunk.content}">текст</td>
+                <td th:text="${hit.chunk.tokenCount}">0</td>
+            </tr>
+        </table>
+    </div>
+</main>
+</body>
+</html>

@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Документы')}"></head>
+<body>
+<header th:replace="~{fragments :: header}"></header>
+<main>
+    <div th:replace="~{fragments :: messages}"></div>
+    <h2>Документы базы знаний</h2>
+
+    <p th:if="${#lists.isEmpty(documents)}">Документов пока нет.</p>
+
+    <table class="grid" th:unless="${#lists.isEmpty(documents)}">
+        <tr>
+            <th>ID</th><th>Название</th><th>Источник</th><th>Язык</th>
+            <th>Токенов</th><th>Чанков</th><th>Создан</th><th>Действия</th>
+        </tr>
+        <!-- th:each — цикл по списку documents, который положил в Model контроллер -->
+        <tr th:each="doc : ${documents}">
+            <td th:text="${doc.id}">1</td>
+            <td th:text="${doc.title}">Название</td>
+            <td th:text="${doc.source}">Источник</td>
+            <td th:text="${doc.language}">ru</td>
+            <td th:text="${doc.tokenCount}">0</td>
+            <td th:text="${doc.chunkCount}">0</td>
+            <td th:text="${#temporals.format(doc.createdAt, 'dd.MM.yyyy HH:mm')}">01.01.2026</td>
+            <td class="actions">
+                <a th:href="@{/documents/{id}/chunks(id=${doc.id})}">Чанки</a>
+                <a th:href="@{/documents/{id}/edit(id=${doc.id})}">Изменить</a>
+                <!-- Удаление меняет данные, поэтому это POST-форма, а не ссылка (GET) -->
+                <form th:action="@{/documents/{id}/delete(id=${doc.id})}" method="post"
+                      onsubmit="return confirm('Удалить документ вместе со всеми чанками?')">
+                    <button type="submit" class="danger">Удалить</button>
+                </form>
+            </td>
+        </tr>
+    </table>
+</main>
+</body>
+</html>

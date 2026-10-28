@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<!-- Общие куски страниц. Остальные шаблоны подключают их через th:replace. -->
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:fragment="head(title)">
+    <meta charset="UTF-8">
+    <title th:text="${title} + ' — RAG Knowledge Base (Spring)'">RAG</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<header th:fragment="header">
+    <h1>RAG Knowledge Base <small>Spring</small></h1>
+    <nav>
+        <a th:href="@{/documents}">Документы</a>
+        <a th:href="@{/documents/new}">+ Новый документ</a>
+        <a th:href="@{/search}">Поиск контекста</a>
+    </nav>
+</header>
+
+<!-- Flash-сообщения: переданы из контроллера через RedirectAttributes и живут ровно один запрос -->
+<div th:fragment="messages">
+    <div class="msg-info" th:if="${message}" th:text="${message}"></div>
+    <div class="msg-error" th:if="${error}" th:text="${error}"></div>
+</div>
+
+</body>
+</html>
