@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<!-- Общий шаблон: шапка, меню, блок сообщений. Страницы подставляют свой контент в ui:insert. -->
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="jakarta.faces.html"
+      xmlns:ui="jakarta.faces.facelets">
+<h:head>
+    <meta charset="UTF-8"/>
+    <title><ui:insert name="title">RAG Knowledge Base</ui:insert></title>
+    <h:outputStylesheet name="css/style.css"/>
+</h:head>
+<h:body>
+    <header>
+        <h1>RAG Knowledge Base <small style="color:#ffc86b;font-weight:normal;font-size:14px">ЛР4</small></h1>
+        <nav>
+            <h:link outcome="documents" value="Документы"/>
+            <h:link outcome="document-edit" value="+ Новый документ"/>
+            <h:link outcome="search" value="Поиск контекста"/>
+            <h:link outcome="changes" value="Журнал изменений"/>
+            <a href="#{request.contextPath}/api/documents">REST API (XML + XSLT)</a>
+        </nav>
+    </header>
+    <main>
+        <!-- globalOnly: здесь только общие сообщения; ошибки полей выводятся рядом с полями (h:message) -->
+        <h:messages globalOnly="true" infoClass="msg-info" errorClass="msg-error" layout="list"/>
+        <ui:insert name="content"/>
+    </main>
+</h:body>
+</html>

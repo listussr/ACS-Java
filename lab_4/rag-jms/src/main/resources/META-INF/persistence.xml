@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence xmlns="https://jakarta.ee/xml/ns/persistence"
+             xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence https://jakarta.ee/xml/ns/persistence/persistence_3_0.xsd"
+             version="3.0">
+
+    <!-- Единица персистентности: связывает сущности с источником данных.
+         JTA = транзакциями управляет контейнер (EJB), а не мы вручную. -->
+    <persistence-unit name="ragPU" transaction-type="JTA">
+        <!-- JNDI-имя пула соединений, созданного на сервере через asadmin/консоль -->
+        <jta-data-source>jdbc/ragDS</jta-data-source>
+
+        <class>ru.acs.rag.entity.Document</class>
+        <class>ru.acs.rag.entity.Chunk</class>
+        <class>ru.acs.rag.entity.ChangeLog</class>
+        <exclude-unlisted-classes>true</exclude-unlisted-classes>
+
+        <!-- Отключаем общий кэш EclipseLink: всегда читаем актуальные данные из БД
+             (важно, если БД меняют в обход приложения, например SQL-скриптом). -->
+        <shared-cache-mode>NONE</shared-cache-mode>
+
+        <properties>
+            <!-- Схему создаёт SQL-скрипт, JPA её не трогает -->
+            <property name="jakarta.persistence.schema-generation.database.action" value="none"/>
+            <property name="eclipselink.logging.level.sql" value="FINE"/>
+            <property name="eclipselink.logging.parameters" value="true"/>
+        </properties>
+    </persistence-unit>
+</persistence>

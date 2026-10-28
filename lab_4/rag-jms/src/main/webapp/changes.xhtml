@@ -1,0 +1,53 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="jakarta.faces.html"
+                xmlns:f="jakarta.faces.core"
+                xmlns:ui="jakarta.faces.facelets"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">Журнал изменений</ui:define>
+
+    <ui:define name="content">
+        <f:metadata>
+            <f:viewParam name="entity" value="#{changeLogBean.entity}"/>
+        </f:metadata>
+
+        <h2>Журнал изменений</h2>
+        <p class="hint">
+            Записи создаёт ChangeLogMdb, получая JMS-сообщения из топика jms/ragChanges.
+            Показаны последние 100. Фильтр:
+            <h:link outcome="changes" value="все"/> ·
+            <h:link outcome="changes" value="документы"><f:param name="entity" value="Document"/></h:link> ·
+            <h:link outcome="changes" value="чанки"><f:param name="entity" value="Chunk"/></h:link>
+        </p>
+
+        <h:dataTable value="#{changeLogBean.entries}" var="c" styleClass="grid"
+                     rendered="#{not empty changeLogBean.entries}">
+            <h:column>
+                <f:facet name="header">№</f:facet>
+                #{c.id}
+            </h:column>
+            <h:column>
+                <f:facet name="header">Когда</f:facet>
+                <h:outputText value="#{c.changedAt}">
+                    <f:convertDateTime type="localDateTime" pattern="dd.MM.yyyy HH:mm:ss"/>
+                </h:outputText>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Тип</f:facet>
+                <span class="change-#{c.changeType}">#{c.changeType}</span>
+            </h:column>
+            <h:column>
+                <f:facet name="header">Сущность</f:facet>
+                #{c.entityClass}, id #{c.entityId}
+            </h:column>
+            <h:column>
+                <f:facet name="header">Новые значения полей</f:facet>
+                <pre class="details">#{c.details}</pre>
+            </h:column>
+        </h:dataTable>
+
+        <h:panelGroup rendered="#{empty changeLogBean.entries}">
+            <p>Журнал пуст. Измените что-нибудь — запись появится через мгновение.</p>
+        </h:panelGroup>
+    </ui:define>
+</ui:composition>

@@ -1,0 +1,32 @@
+body { font-family: "Segoe UI", Arial, sans-serif; margin: 0; background: #f5f6f8; color: #222; }
+header { background: #2d3e50; color: #fff; padding: 12px 24px; display: flex; align-items: center; gap: 32px; }
+header h1 { margin: 0; font-size: 20px; }
+nav a { color: #cfe3ff; margin-right: 18px; text-decoration: none; }
+nav a:hover { text-decoration: underline; }
+main { padding: 16px 24px; max-width: 1200px; }
+
+table.grid { border-collapse: collapse; width: 100%; background: #fff; }
+table.grid th, table.grid td { border: 1px solid #d8dde3; padding: 6px 8px; vertical-align: top; text-align: left; }
+table.grid th { background: #e9edf2; }
+table.grid td a { margin-right: 8px; }
+.chunk-text { white-space: pre-wrap; font-size: 13px; }
+
+form.edit { display: flex; flex-direction: column; gap: 4px; max-width: 700px; }
+form.edit label { margin-top: 10px; font-weight: 600; }
+form.inline { display: flex; align-items: center; gap: 8px; margin: 12px 0; flex-wrap: wrap; }
+.buttons { margin-top: 14px; display: flex; gap: 12px; align-items: center; }
+
+input[type=submit] { cursor: pointer; padding: 4px 12px; }
+input.danger { color: #b00020; }
+.hint { color: #666; font-size: 13px; }
+.field-error { color: #b00020; font-size: 13px; }
+
+ul { padding: 0; list-style: none; }
+.msg-info { background: #e3f4e5; border-left: 4px solid #3a9d4a; padding: 6px 10px; margin-bottom: 6px; }
+.msg-error { background: #fbe6e8; border-left: 4px solid #b00020; padding: 6px 10px; margin-bottom: 6px; }
+
+/* ЛР4: журнал изменений */
+pre.details { white-space: pre-wrap; word-break: break-word; font-size: 12px; margin: 0; max-height: 8em; overflow: auto; }
+.change-INSERT { color: #1e7b34; font-weight: 600; }
+.change-UPDATE { color: #1f5fa8; font-weight: 600; }
+.change-DELETE { color: #b00020; font-weight: 600; }
