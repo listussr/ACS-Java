@@ -1,0 +1,8 @@
+# Сервер приложений скачивается отдельно (см. README)
+server/
+# Результаты сборки Maven
+rag-app/target/
+# IDE
+.idea/
+*.iml
+.vscode/
