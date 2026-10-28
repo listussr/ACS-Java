@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head th:replace="~{fragments :: head('Документ')}"></head>
+<body>
+<header th:replace="~{fragments :: header}"></header>
+<main>
+    <h2 th:text="${document.id == null} ? 'Новый документ' : 'Редактирование документа'">Документ</h2>
+
+    <!-- th:object связывает форму с объектом document; th:field — поле формы с его свойством.
+         Новый документ -> POST /documents, существующий -> POST /documents/{id} -->
+    <form class="edit" method="post" th:object="${document}"
+          th:action="${document.id == null} ? @{/documents} : @{/documents/{id}(id=${document.id})}">
+
+        <label for="title">Название *</label>
+        <input type="text" id="title" th:field="*{title}" size="60">
+        <span class="field-error" th:if="${#fields.hasErrors('title')}" th:errors="*{title}"></span>
+
+        <label for="source">Источник (URL, файл)</label>
+        <input type="text" id="source" th:field="*{source}" size="60">
+        <span class="field-error" th:if="${#fields.hasErrors('source')}" th:errors="*{source}"></span>
+
+        <label for="language">Язык *</label>
+        <select id="language" th:field="*{language}">
+            <option value="ru">Русский</option>
+            <option value="en">English</option>
+        </select>
+
+        <label for="content">Текст документа *</label>
+        <textarea id="content" th:field="*{content}" rows="12" cols="80"></textarea>
+        <span class="field-error" th:if="${#fields.hasErrors('content')}" th:errors="*{content}"></span>
+
+        <p class="hint" th:if="${document.id != null}">
+            Сейчас в тексте <span th:text="${document.tokenCount}">0</span> токенов
+            (пересчитывается автоматически при сохранении).
+        </p>
+
+        <div class="buttons">
+            <button type="submit">Сохранить</button>
+            <a th:href="@{/documents}">Отмена</a>
+        </div>
+    </form>
+</main>
+</body>
+</html>
