@@ -1,0 +1,73 @@
+<ui:composition xmlns="http://www.w3.org/1999/xhtml"
+                xmlns:h="jakarta.faces.html"
+                xmlns:f="jakarta.faces.core"
+                xmlns:ui="jakarta.faces.facelets"
+                template="/WEB-INF/template.xhtml">
+
+    <ui:define name="title">Чанки</ui:define>
+
+    <ui:define name="content">
+        <f:metadata>
+            <f:viewParam name="docId" value="#{chunkListBean.docId}" required="true"/>
+            <f:viewAction action="#{chunkListBean.load}"/>
+        </f:metadata>
+
+        <h:panelGroup rendered="#{chunkListBean.document == null}">
+            <p>Документ не найден. <h:link outcome="documents" value="К списку документов"/></p>
+        </h:panelGroup>
+
+        <h:panelGroup rendered="#{chunkListBean.document != null}">
+            <h2>Чанки документа «#{chunkListBean.document.title}»</h2>
+            <p class="hint">
+                В документе #{chunkListBean.document.tokenCount} токенов,
+                в чанках всего #{chunkListBean.totalTokens} (больше из-за перекрытия).
+            </p>
+
+            <!-- Автоматическая нарезка: бизнес-логика в DocumentService.rechunk -->
+            <h:form styleClass="inline">
+                <h:outputLabel for="size" value="Размер чанка (токенов):"/>
+                <h:inputText id="size" value="#{chunkListBean.chunkSize}" size="4"/>
+                <h:outputLabel for="overlap" value="Перекрытие:"/>
+                <h:inputText id="overlap" value="#{chunkListBean.overlap}" size="4"/>
+                <h:commandButton value="Разбить на чанки заново" action="#{chunkListBean.rechunk}"
+                                 onclick="return confirm('Текущие чанки будут удалены. Продолжить?')"/>
+            </h:form>
+
+            <p>
+                <h:link outcome="chunk-edit" value="+ Добавить чанк вручную">
+                    <f:param name="docId" value="#{chunkListBean.docId}"/>
+                </h:link>
+            </p>
+
+            <h:form>
+                <h:dataTable value="#{chunkListBean.chunks}" var="c" styleClass="grid"
+                             rendered="#{not empty chunkListBean.chunks}">
+                    <h:column>
+                        <f:facet name="header">№</f:facet>
+                        #{c.chunkIndex}
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Текст</f:facet>
+                        <span class="chunk-text">#{c.content}</span>
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Токенов</f:facet>
+                        #{c.tokenCount}
+                    </h:column>
+                    <h:column>
+                        <f:facet name="header">Действия</f:facet>
+                        <h:link outcome="chunk-edit" value="Изменить">
+                            <f:param name="id" value="#{c.id}"/>
+                        </h:link>
+                        <h:commandButton value="Удалить" styleClass="danger"
+                                         action="#{chunkListBean.delete(c.id)}"
+                                         onclick="return confirm('Удалить чанк?')"/>
+                    </h:column>
+                </h:dataTable>
+                <h:panelGroup rendered="#{empty chunkListBean.chunks}">
+                    <p>Чанков нет — нажмите «Разбить на чанки заново».</p>
+                </h:panelGroup>
+            </h:form>
+        </h:panelGroup>
+    </ui:define>
+</ui:composition>
